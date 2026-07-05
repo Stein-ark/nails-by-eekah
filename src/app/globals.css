@@ -1,26 +1,100 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------
+   Design tokens — Nails By Eekah
+   Quiet neutral luxe. Warm nude, oat & mocha ("clean girl" aesthetic),
+   understated serif, soft grain, photography-led. Less, but better.
+   No brightness, no gradients, no decoration.
+------------------------------------------------------------------ */
+@theme {
+  --color-oat: #f2ece2; /* base */
+  --color-oat-deep: #e8dfd1; /* alternating band */
+  --color-paper: #faf6ef; /* cards */
+
+  --color-nude: #d8c4b1;
+  --color-sand: #c4ad96;
+  --color-mocha: #8a6f5a;
+  --color-mocha-deep: #6a5241;
+
+  --color-ink: #3a3128; /* warm near-black text */
+  --color-ink-soft: #897b6d;
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-manrope);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-oat);
+  color: var(--color-ink);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(138, 111, 90, 0.22);
+  color: var(--color-mocha-deep);
+}
+
+@layer base {
+  button,
+  a {
+    cursor: pointer;
+  }
+}
+
+/* Soft film grain laid over the whole page — barely there */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Hairline dividers in warm mocha */
+.hairline {
+  border-color: rgba(58, 49, 40, 0.14);
+}
+
+/* Tracked micro-label */
+.label {
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------
+   Scroll reveal — slow & understated
+------------------------------------------------------------------ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
